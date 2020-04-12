@@ -25,16 +25,16 @@ class Product extends Model
 
     public function seller()
     {
-        return $this->belongsTo(Seller::class);
+        return $this->belongsTo('App\Seller');
     }
 
     public function transactions()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany('App\Transaction');
     }
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsToMany('App\Category');
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Transaction;
 use App\Scopes\BuyerScope;
 
 class Buyer extends User
@@ -15,6 +14,6 @@ class Buyer extends User
 
     public function transactions()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany('App\Transaction');
     }
 }
