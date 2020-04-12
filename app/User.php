@@ -14,8 +14,8 @@ class User extends Authenticatable
     use Notifiable, SoftDeletes;
     protected $dates = ['deleted_at'];
 
-    const VERIFIED_USER = '1';
-    const UNVERIFIED_USER = '0';
+    const VERIFIED_USER = 1;
+    const UNVERIFIED_USER = 0;
 
     const ADMIN = 'true';
     const REGULAR_USER = 'false';
