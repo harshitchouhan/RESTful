@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+// use Illuminate\Support\Facades\Route;
 // use Illuminate\Routing\Route;
 
 /*
@@ -81,3 +81,4 @@ Route::resource('transactions.sellers', 'Transaction\TransactionSellerController
 |--------------------------------------------------------------------------
 */
 Route::resource('users', 'User\UserController', ['except' => ['create', 'edit']]);
+Route::get('users/verify/{token}', 'User\UserController@verify')->name('verify');
