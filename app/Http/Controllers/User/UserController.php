@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\ApiController;
-use App\Http\Controllers\Controller;
+use App\Mail\UserCreated;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends ApiController
 {
@@ -67,7 +68,7 @@ class UserController extends ApiController
     public function update(Request $request, User $user)
     {
         $rules = [
-            'email' => 'email|unique:users, email, ' . $user->id,
+            'email' => 'email|unique:users,email, ' . $user->id,
             'password' => 'min:6|confirmed',
             'admin' => 'in:' . User::ADMIN . ',' . User::REGULAR_USER,
         ];
@@ -96,7 +97,7 @@ class UserController extends ApiController
             $user->admin = $request->admin;
         }
 
-        if(!$user->isDirty()) {
+        if (!$user->isDirty()) {
             return $this->errorResponse('You need to specify different value to update', 422);
         }
 
@@ -123,5 +124,18 @@ class UserController extends ApiController
         $user->verification_token = null;
         $user->save();
         return $this->showMessage('The account has been verified successfully');
+    }
+
+    public function resend(User $user)
+    {
+        if ($user->isVerified()) {
+            return $this->errorResponse('The user is already verified', 409);
+        }
+
+        retry(5, function() use($user) {
+            Mail::to($user)->send(new UserCreated($user));
+        }, 100);
+
+        return $this->showMessage('The verification email has been resend');
     }
 }
